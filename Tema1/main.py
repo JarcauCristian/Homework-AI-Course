@@ -40,7 +40,7 @@ for i in range(0, 4):
 
 print(f"The normalized list: \n{np_list}\n")
 
-np_list_bk = np.sum(np_list * np.array([0.2, 1.1, -0.9, 1]), axis=1)
+np_list_bk = np.sum(np.array(data) * np.array([0.2, 1.1, -0.9, 1]), axis=1)
 out_data = np.append(np.array(data), np_list_bk.reshape(150, 1), axis=1)
 out_data = np.append(out_data, np.array(solution).reshape(150, 1), axis=1)
 print(f"The weighted list: \n{out_data}")
