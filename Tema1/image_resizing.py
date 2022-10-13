@@ -1,7 +1,5 @@
-import csv
-
 import numpy as np
-from pprint import pprint
+
 with open('imag.txt', 'r') as data_in:
     data = data_in.read()
 
