@@ -57,8 +57,11 @@ def memory_network(data):
 points = create_list()
 points = weight_list(points, [1, 1, 1])
 
-# for point in points:
-#     print(sgn_data(np.sum(point)))
+for point in points:
+    print(f'Point {point} is from {sgn_data(np.sum(point))}')
+
+print('\n')
 
 for index, point in enumerate(create_list()):
-    print(f'Point {index} converges to {memory_network(list(point))}')
+    if list(point) == memory_network(list(point)):
+        print(f'Point {index} is a stable point')
