@@ -15,6 +15,8 @@ def gradient_descent(start_x, iteration, learning_rate):
     for i in range(iteration):
         data.append(data[i] - learning_rate * df(data[i]))
         print(data[i] - learning_rate * df(data[i]))
+        if -0.01 < data[i] - learning_rate * df(data[i]) < 0.001:
+            break
 
 
 gradient_descent(-1, 100, 0.01)
