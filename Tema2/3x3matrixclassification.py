@@ -3,10 +3,7 @@ import numpy as np
 
 
 def sgn_pos(sum_pond):
-    if sum_pond < 0:
-        return 0
-    else:
-        return 1
+    return 1 if sum_pond > 0 else 0
 
 
 def read_data(path):
@@ -25,7 +22,7 @@ def read_data(path):
 
 unaltered_data = read_data("data_matrix.csv")
 altered_data = read_data("altered_data.csv")
-weights = np.array([[-0.65, -0.41, 0.15], [0.19, 0.59, 0.04], [-0.95, 0.77, 0.55]])
+weights = np.array([[-0.14, 0.06, -0.28], [-0.93, -0.08, 0.28], [-0.64, 0.47, -0.85]])
 print("Results for unaltered data:")
 for index, matrix in enumerate(unaltered_data):
     print(f'For matrix {index} the neuron response is: {sgn_pos(np.sum(weights * matrix))}')
@@ -33,3 +30,10 @@ for index, matrix in enumerate(unaltered_data):
 print("\nResults for altered data:")
 for index, matrix in enumerate(altered_data):
     print(f'For matrix {index} the neuron response is: {sgn_pos(np.sum(weights * matrix))}')
+
+counter = 0
+for index in range(4):
+    if sgn_pos(np.sum(weights * altered_data[index])) == sgn_pos(np.sum(weights * unaltered_data[index])):
+        counter += 1
+
+print(f'The rate of correct classification is: {counter/len(altered_data) * 100}%')

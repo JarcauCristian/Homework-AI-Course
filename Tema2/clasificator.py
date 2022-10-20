@@ -15,7 +15,7 @@ def create_list():
 
 
 def weight_list(data: np.array, weight):
-    return data * weight
+    return np.dot(data, weight)
 
 
 def sgn_data(data):
@@ -55,10 +55,10 @@ def memory_network(data):
 
 
 points = create_list()
-points = weight_list(points, [1, 1, 1])
+points_2 = weight_list(points, [1, 1, 1])
 
-for point in points:
-    print(f'Point {point} is from {sgn_data(np.sum(point))}')
+for i, point in enumerate(points_2):
+    print(f'Point {points[i]} is from {sgn_data(np.sum(point))}')
 
 print('\n')
 
