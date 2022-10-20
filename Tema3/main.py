@@ -38,6 +38,9 @@ def gradient_descent_h_func(start_x, start_y, iteration, learning_rate):
         data_x.append(new_x)
         data_y.append(new_y)
         print(f'At iteration {i+1} the function is {f.h(new_x, new_y)}')
+        if f.h(new_x, new_y) > 1e+10:
+            print("Function goes to infinity!")
+            break
         if abs(data_x[-1] - data_x[-2]) <= 0.0001 and abs(data_y[-1] - data_y[-2]) <= 0.0001:
             break
 
