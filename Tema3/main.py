@@ -33,8 +33,8 @@ def gradient_descent_h_func(start_x, start_y, iteration, learning_rate):
     data_x.append(start_x)
     data_y.append(start_y)
     for i in range(iteration):
-        new_x = data_x[i] - learning_rate * f.dhx(data_x[i], data_x[i])
-        new_y = data_y[i] - learning_rate * f.dhy(data_y[i], data_y[i])
+        new_x = data_x[i] - learning_rate * f.dhx(data_x[i], data_y[i])
+        new_y = data_y[i] - learning_rate * f.dhy(data_x[i], data_y[i])
         data_x.append(new_x)
         data_y.append(new_y)
         print(f'At iteration {i+1} the function is {f.h(new_x, new_y)}')
