@@ -2,17 +2,20 @@ import random
 import functions as f
 
 
-def gradient_descent(start_x, iteration, learning_rate):
+def gradient_descent(start_x, iteration, learning_rate, threshold=0.00001):
     data = list()
     data.append(start_x)
     for i in range(iteration):
         data.append(data[i] - learning_rate * f.df(data[i]))
         print(f'At iteration {i+1} the function is {f.f(data[i] - learning_rate * f.df(data[i]))}')
-        if abs(data[-1] - data[-2]) <= 0.00001:
+        if f.f(data[i] - learning_rate * f.df(data[i])) > 1e+10:
+            print("Function goes to infinity! Minim undefined!")
+            break
+        if abs(data[-1] - data[-2]) <= threshold:
             break
 
 
-def gradient_descent_g_func(start_x, start_y, iteration, learning_rate):
+def gradient_descent_g_func(start_x, start_y, iteration, learning_rate, threshold=0.00001):
     data_x = list()
     data_y = list()
     data_x.append(start_x)
@@ -26,11 +29,11 @@ def gradient_descent_g_func(start_x, start_y, iteration, learning_rate):
         if f.g(new_x, new_y) > 1e+10:
             print("Function goes to infinity! Minim undefined!")
             break
-        if abs(data_x[-1] - data_x[-2]) <= 0.00001 and abs(data_y[-1] - data_y[-2]) <= 0.00001:
+        if abs(data_x[-1] - data_x[-2]) <= threshold and abs(data_y[-1] - data_y[-2]) <= threshold:
             break
 
 
-def gradient_descent_h_func(start_x, start_y, iteration, learning_rate):
+def gradient_descent_h_func(start_x, start_y, iteration, learning_rate, threshold=0.00001):
     data_x = list()
     data_y = list()
     data_x.append(start_x)
@@ -44,7 +47,7 @@ def gradient_descent_h_func(start_x, start_y, iteration, learning_rate):
         if f.h(new_x, new_y) > 1e+10:
             print("Function goes to infinity! Minim undefined!")
             break
-        if abs(data_x[-1] - data_x[-2]) <= 0.00001 and abs(data_y[-1] - data_y[-2]) <= 0.00001:
+        if abs(data_x[-1] - data_x[-2]) <= threshold and abs(data_y[-1] - data_y[-2]) <= threshold:
             break
 
 
