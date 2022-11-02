@@ -39,7 +39,8 @@ def winner_takes_all(patterns, weights, epochs=20, learning_rate=1):
             minim = np.min(minim)
             index = [key for key, value in dct.items() if value == minim][0]
             weights[:, index] = weights[:, index] + learning_rate*min_from[index]
-            print(f'{weights} The prototype for pattern {j + 1}')
+            print(f'p1: {weights[:, 0]}, p2: {weights[:, 1]}, p3: {weights[:, 2]} The prototype for pattern {j + 1}')
+        print()
 
 
 w = init_random_weights()
