@@ -39,6 +39,7 @@ def bipolar_continuum_hebbian(weight, data, dt_len=1, learning_rate=1, epochs=10
 
 
 x = np.array([[1, -2, 1.5, 0], [1, -0.5, -2, -1.5], [0, 1, -1, 1.5]])
+print(f'x: {x}')
 initial_weight = np.array([1, -1, 0, 0.5])
 print('\nBipolar binary function hebbian')
 bipolar_hebbian(initial_weight, x, 3, 0.1)
@@ -48,7 +49,7 @@ bipolar_continuum_hebbian(initial_weight, x, 3, 0.1)
 
 x2 = np.array([[1, -2], [0, 1], [2, 3], [1, -1]])
 w1 = np.array([1, -1])
-
+print(f'x2: {x2}')
 print('\nBipolar binary function hebbian for second array')
 bipolar_hebbian(w1, x2, 4, 0.1)
 
