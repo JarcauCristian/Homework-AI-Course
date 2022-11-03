@@ -8,6 +8,9 @@ def gradient_descent(start_x, iteration, learning_rate, threshold=0.00001):
     for i in range(iteration):
         data.append(data[i] - learning_rate * f.df(data[i]))
         print(f'At iteration {i+1} the function is {f.f(data[i] - learning_rate * f.df(data[i]))}')
+        if f.f(data[i] - learning_rate * f.df(data[i])) > 1e+10:
+            print("Function goes to infinity! Minim undefined!")
+            break
         if abs(data[-1] - data[-2]) <= threshold:
             break
 
