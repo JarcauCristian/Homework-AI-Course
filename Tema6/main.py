@@ -17,14 +17,17 @@ def perceptron_rule(patterns, weights, response, learning_rate=0.1):
     :return:
     """
     last_weight = np.array([])
+    counter = 1
     while not np.array_equal(last_weight, weights):
         last_weight = weights
+        print(f'Epoch {counter}')
         for i in range(len(patterns)):
             net = np.dot(weights, patterns[i])
             print(f'{net} Net for x{i+1}')
             sgn_net = sgn(net)
             weights = weights + learning_rate*(response[i] - sgn_net)*patterns[i]
         print()
+        counter += 1
 
 
 w = np.array([0, 1, 0])
