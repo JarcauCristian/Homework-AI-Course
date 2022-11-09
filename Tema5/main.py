@@ -8,9 +8,9 @@ def init_random_weights(p=2):
     w2 = []
     w3 = []
     for i in range(p):
-        w1.append(random.randint(10, 200))
-        w2.append(random.randint(10, 200))
-        w3.append(random.randint(10, 200))
+        w1.append(random.random())
+        w2.append(random.random())
+        w3.append(random.random())
     return np.array([w1, w2, w3])
 
 
