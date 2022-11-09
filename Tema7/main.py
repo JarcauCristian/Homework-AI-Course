@@ -4,10 +4,14 @@ import random
 
 
 def clusters_initialize(dataset, nr_clusters: int):
-    clusters = []
+    clusters = list()
     m = len(dataset) - 1
     for i in range(nr_clusters):
-        clusters.append(dataset[random.randint(0, m-1)])
+        r = random.randint(0, m-1)
+        dt = dataset[r]
+        while np.isin([dt], clusters).all():
+            r = random.randint(0, m-1)
+        clusters.append(dataset[r])
     return np.array(clusters)
 
 
