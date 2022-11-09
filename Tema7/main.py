@@ -22,11 +22,10 @@ def read_patterns(filepath: str):
 
 
 def k_mean_clustering(patterns, clusters):
-    counter = 0
     old_cluster = np.array([[0, 0], [0, 0], [0, 0]])
+    cp = {}
     while not np.array_equal(old_cluster, clusters):
         groups = {}
-        print(f'Epoch {counter+1}')
         old_cluster = np.array(clusters)
         for i in range(len(patterns)):
             minim = 100000
@@ -68,12 +67,13 @@ def k_mean_clustering(patterns, clusters):
         if c3_t != 0:
             clusters[2][0] = c3_x/c3_t
             clusters[2][1] = c3_y/c3_t
-        counter += 1
-        for key, value in groups.items():
-            print(f'Point P{key} in cluster {value}')
+        cp = groups
+    print(f'Final centroids: \n{clusters}')
+    for key, value in cp.items():
+        print(f'Point P{key} in cluster {value}')
 
 
 x = read_patterns('patterns.csv')
 k = clusters_initialize(x, 3)
-print(k)
+print(f'Initial centroids: \n{k}\n')
 k_mean_clustering(x, k)
