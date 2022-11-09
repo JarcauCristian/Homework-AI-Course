@@ -10,15 +10,11 @@ def sgn(data):
         return 1
 
 
-def init_random_weights(p=2):
-    w1 = []
-    w2 = []
-    w3 = []
+def init_random_weights(dataset, p=3):
+    weights = []
     for i in range(p):
-        w1.append(random.randint(0, 10))
-        w2.append(random.randint(0, 10))
-        w3.append(random.randint(0, 10))
-    return np.array([w1, w2, w3])
+        weights.append(dataset[random.randint(0, len(dataset) - 1)])
+    return np.array(weights)
 
 
 def read_patterns(filepath: str):
@@ -37,23 +33,19 @@ def winner_takes_all(patterns, weights, epochs=20, learning_rate=1):
         if i % 5 == 0 and learning_rate > 0:
             learning_rate -= 0.1
         for j in range(len(patterns)):
-            min_from = list()
-            min_from.append(np.dot(weights[0], patterns[j]))
-            min_from.append(np.dot(weights[1], patterns[j]))
-            min_from.append(np.dot(weights[2], patterns[j]))
-            maxim = 1000000
+            maxim = 100000
             pos = 0
             for a, val in enumerate(weights):
-                if maxim > np.dot(val, patterns[j]):
-                    maxim = np.dot(val, patterns[j])
+                if maxim > np.linalg.norm(patterns[j] - val):
+                    maxim = np.linalg.norm(patterns[j] - val)
                     pos = a
             weights[pos] = weights[pos] + learning_rate*(patterns[j] - weights[pos])
             print(f'p1: {weights[0]}, p2: {weights[1]}, p3: {weights[2]} The prototype for pattern {j + 1}')
         print()
 
 
-w = init_random_weights()
-print(w)
 x = read_patterns('patterns.csv')
+w = init_random_weights(x)
+print(w)
 
 winner_takes_all(x, w)
