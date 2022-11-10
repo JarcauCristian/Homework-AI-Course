@@ -28,9 +28,11 @@ def perceptron_rule(patterns, weights, response, learning_rate=0.1):
             weights = weights + learning_rate*(response[i] - sgn_net)*patterns[i]
         print()
         counter += 1
+    print(f'Final weights: {weights}')
 
 
 w = np.array([0, 1, 0])
+print(f'Initial weights: {w}\n')
 x = np.array([[2, 1, -1], [0, -1, -1]])
 d = np.array([-1, 1])
 
