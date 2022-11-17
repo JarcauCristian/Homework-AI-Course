@@ -73,8 +73,12 @@ def k_mean_clustering(patterns, clusters):
             clusters[2][1] = c3_y/c3_t
         cp = groups
     print(f'Final centroids: \n{clusters}')
-    for key, value in cp.items():
-        print(f'Point P{key} in cluster {value}')
+    cl_1 = [key for key, value in cp.items() if value == 0]
+    cl_2 = [key for key, value in cp.items() if value == 1]
+    cl_3 = [key for key, value in cp.items() if value == 2]
+    print(f'\nPoints {[e+1 for e in cl_1]} in cluster 1')
+    print(f'Points {[e+1 for e in cl_2]} in cluster 2')
+    print(f'Points {[e+1 for e in cl_3]} in cluster 3')
 
 
 x = read_patterns('patterns.csv')
