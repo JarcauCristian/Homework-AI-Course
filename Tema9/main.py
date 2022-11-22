@@ -1,41 +1,28 @@
 import random
 import numpy as np
-from decimal import *
 
 
-def init_chromosomes(number_of_chromosomes=50):
+def init_chromosomes(number_of_chromosomes=6):
     chromosomes = []
     for i in range(number_of_chromosomes):
-        chromosomes.append("{:010b}".format(random.randint(0, 1024)))
+        r = random.randint(1, 63)
+        chromosomes.append("{:06b}".format(r))
     return chromosomes
-
-
-def calculate_object_function(chromosome):
-    getcontext().prec = 2
-    s = 0
-    p = 1
-    for i in range(len(chromosome)):
-        if chromosome[i] == '0':
-            s += i+1
-        elif chromosome[i] == '1':
-            p *= (i+1)
-    return float(Decimal(abs(36 - s) / 36) + Decimal(abs(360 - p) / 360))
 
 
 def make_f_and_p(chromosomes):
     f = []
     p = []
-    for i in range(len(chromosomes)):
-        f.append(calculate_object_function(chromosomes[i]))
+    for i in chromosomes:
+        f.append(1/int(i, 2))
 
     for i in f:
         p.append(i/np.sum(f))
-
     return f, p
 
 
 def rotate_genes(c1, c2, number_to_rotate):
-    if 1 < number_to_rotate > 10:
+    if 1 < number_to_rotate > 6:
         aux = c1[-1]
         c1 = c1[:-1] + c2[-1]
         c2 = c2[:-1] + aux
@@ -58,20 +45,15 @@ def mutation(chromosomes):
     return chromosomes
 
 
-def main():
-    c = init_chromosomes()
-    f, p = make_f_and_p(c)
-    print(f'{c}\n{f}')
-    while np.sum(f) < 0.7:
-        i = 0
-        r = random.randint(1, 10)
-        while i < len(c) - 1:
-            c[i], c[i + 1] = rotate_genes(c[i], c[i + 1], r)
-            i += 2
+c = init_chromosomes()
+f, p = make_f_and_p(c)
+print(f'{c}\n')
+r = random.randint(1, 6)
+i = 0
+while i < len(c) - 1:
+    c[i], c[i+1] = rotate_genes(c[i], c[i+1], r)
+    i += 2
 
-        c = mutation(c)
-        f, p = make_f_and_p(c)
+c = mutation(c)
 
-
-if __name__ == '__main__':
-    main()
+print(f'{c}')
