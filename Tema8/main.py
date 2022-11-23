@@ -75,7 +75,7 @@ def main():
     f, p = make_f_and_p(c)
     print(np.sum(f))
     p = OrderedDict(sorted(p.items()))
-    while np.sum(f) < 10000:
+    while np.sum(f) < 100000:
         minim, maxim = get_min_max_from_ordered_dict(p)
         new_c = []
         for i in range(len(c)):
@@ -96,7 +96,7 @@ def main():
         c = mutation(c)
         f, p = make_f_and_p(c)
         p = OrderedDict(sorted(p.items()))
-    print(np.sum(f))
+    print(np.sum(f), c)
 
 
 if __name__ == '__main__':
