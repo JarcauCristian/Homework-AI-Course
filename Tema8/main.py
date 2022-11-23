@@ -1,4 +1,5 @@
 import random
+from collections import OrderedDict
 import numpy as np
 from decimal import *
 
@@ -24,12 +25,12 @@ def calculate_object_function(chromosome):
 
 def make_f_and_p(chromosomes):
     f = []
-    p = []
+    p = {}
     for i in range(len(chromosomes)):
         f.append(calculate_object_function(chromosomes[i]))
 
-    for i in f:
-        p.append(i/np.sum(f))
+    for i in range(len(f)):
+        p[f[i] / np.sum(f)] = chromosomes[i]
 
     return f, p
 
@@ -58,11 +59,34 @@ def mutation(chromosomes):
     return chromosomes
 
 
+def get_min_max_from_ordered_dict(ordered_dict):
+    minim = 10000000
+    maxim = 0
+    for i in ordered_dict.keys():
+        if minim > i:
+            minim = i
+        if maxim < i:
+            maxim = i
+    return minim, maxim
+
+
 def main():
     c = init_chromosomes()
     f, p = make_f_and_p(c)
-    print(f'{c}\n{f}')
-    while np.sum(f) < 0.7:
+    print(np.sum(f))
+    p = OrderedDict(sorted(p.items()))
+    while np.sum(f) < 10000:
+        minim, maxim = get_min_max_from_ordered_dict(p)
+        new_c = []
+        for i in range(len(c)):
+            r = random.uniform(np.min(minim), np.max(maxim))
+            for key, value in p.items():
+                if r < key:
+                    new_c.append(c[c.index(value)])
+                    break
+
+        c = new_c
+
         i = 0
         r = random.randint(1, 10)
         while i < len(c) - 1:
@@ -71,6 +95,8 @@ def main():
 
         c = mutation(c)
         f, p = make_f_and_p(c)
+        p = OrderedDict(sorted(p.items()))
+    print(np.sum(f))
 
 
 if __name__ == '__main__':
