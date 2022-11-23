@@ -1,23 +1,26 @@
 import random
 import numpy as np
+from collections import OrderedDict
 
 
 def init_chromosomes(number_of_chromosomes=6):
     chromosomes = []
     for i in range(number_of_chromosomes):
         r = random.randint(1, 63)
+        while r in chromosomes:
+            r = random.randint(1, 63)
         chromosomes.append("{:06b}".format(r))
     return chromosomes
 
 
 def make_f_and_p(chromosomes):
     f = []
-    p = []
+    p = {}
     for i in chromosomes:
         f.append(1/int(i, 2))
 
-    for i in f:
-        p.append(i/np.sum(f))
+    for i in range(len(f)):
+        p[f[i]/np.sum(f)] = chromosomes[i]
     return f, p
 
 
@@ -45,15 +48,42 @@ def mutation(chromosomes):
     return chromosomes
 
 
+def get_min_max_from_ordered_dict(ordered_dict):
+    minim = 10000000
+    maxim = 0
+    for i in ordered_dict.keys():
+        if minim > i:
+            minim = i
+        if maxim < i:
+            maxim = i
+    return minim, maxim
+
+
 c = init_chromosomes()
 f, p = make_f_and_p(c)
-print(f'{c}\n')
-r = random.randint(1, 6)
-i = 0
-while i < len(c) - 1:
-    c[i], c[i+1] = rotate_genes(c[i], c[i+1], r)
-    i += 2
+print(np.sum(f))
+p = OrderedDict(sorted(p.items()))
+while np.sum(f) < 0.7:
+    minim, maxim = get_min_max_from_ordered_dict(p)
+    new_c = []
+    for i in range(len(c)):
+        r = random.uniform(np.min(minim), np.max(maxim))
+        for key, value in p.items():
+            if r < key:
+                new_c.append(c[c.index(value)])
+                break
 
-c = mutation(c)
+    c = new_c
 
-print(f'{c}')
+    r = random.randint(1, 6)
+    i = 0
+    while i < len(c) - 1:
+        c[i], c[i+1] = rotate_genes(c[i], c[i+1], r)
+        i += 2
+
+    c = mutation(c)
+    f, p = make_f_and_p(c)
+    p = OrderedDict(sorted(p.items()))
+
+print(np.sum(f))
+
