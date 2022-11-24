@@ -61,9 +61,9 @@ def get_min_max_from_ordered_dict(ordered_dict):
 
 c = init_chromosomes()
 f, p = make_f_and_p(c)
-print(np.sum(f))
+print(c)
 p = OrderedDict(sorted(p.items()))
-while np.sum(f) < 0.7:
+for k in range(1):
     minim, maxim = get_min_max_from_ordered_dict(p)
     new_c = []
     for i in range(len(c)):
@@ -85,5 +85,5 @@ while np.sum(f) < 0.7:
     f, p = make_f_and_p(c)
     p = OrderedDict(sorted(p.items()))
 
-print(np.sum(f))
+print(c)
 
