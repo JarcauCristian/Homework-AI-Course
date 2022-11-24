@@ -1,6 +1,4 @@
 import random
-from collections import OrderedDict
-import numpy as np
 from decimal import *
 
 
@@ -20,83 +18,69 @@ def calculate_object_function(chromosome):
             s += i+1
         elif chromosome[i] == '1':
             p *= (i+1)
-    return float(Decimal(abs(36 - s) / 36) + Decimal(abs(360 - p) / 360))
+    return float(Decimal((abs(s - 36)) / 36) + Decimal((abs(p - 360)) / 360))
 
 
-def make_f_and_p(chromosomes):
-    f = []
-    p = {}
+def make_f(chromosomes):
+    f = {}
     for i in range(len(chromosomes)):
-        f.append(calculate_object_function(chromosomes[i]))
+        print(f'{i}: {calculate_object_function(chromosomes[i])}')
+        f[i] = calculate_object_function(chromosomes[i])
 
-    for i in range(len(f)):
-        p[f[i] / np.sum(f)] = chromosomes[i]
-
-    return f, p
+    return f
 
 
-def rotate_genes(c1, c2, number_to_rotate):
-    if 1 < number_to_rotate > 10:
-        aux = c1[-1]
-        c1 = c1[:-1] + c2[-1]
-        c2 = c2[:-1] + aux
-    else:
-        aux = c1[-number_to_rotate:]
-        c1 = c1[:-number_to_rotate] + c2[-number_to_rotate:]
-        c2 = c2[:-number_to_rotate] + aux
-    return c1, c2
+def make_sorted_dict(dct):
+    return {k: v for k, v in sorted(dct.items(), key=lambda item: item[1])}
 
 
-def mutation(chromosomes):
-    for i in range(len(chromosomes)):
-        for j in range(len(chromosomes[i])):
-            m = random.randint(1, 1000)
-            if m == 299:
-                if chromosomes[i][j] == '0':
-                    chromosomes[i] = chromosomes[i][:j] + "1" + chromosomes[i][j+1:]
-                elif chromosomes[i][j] == '1':
-                    chromosomes[i] = chromosomes[i][:j] + "0" + chromosomes[i][j+1:]
+def transform_ordered_dict_to_normal_dict(ord_dict):
+    d = {key: value for (key, value) in ord_dict.items()}
+    return d
+
+
+def select_new_chromosomes(f, number_to_rotate=2):
+    lst = list(f.values())
+    lst[-2] = lst[0]
+    lst[-1] = lst[1]
+
+    return lst
+
+# Sortez populatia dupa valoarea functiei obiectiv, dupa care pe ultimi doi ii elimini si ii inlocuiesc cu primi doi
+# Crossover doar 2 cromozomi
+# Mutation 5 mutations
+# 10000 de iteratii sau cromozom cu functie obiectiv 0
+
+
+def rotate_genes(chromosomes, crossover=2, number_to_rotate=5):
+    for i in range(crossover):
+        c1 = random.randint(0, 49)
+        c2 = random.randint(0, 49)
+        aux = chromosomes[c1][-number_to_rotate:]
+        chromosomes[c1] = chromosomes[c1][:-number_to_rotate] + chromosomes[c2][-number_to_rotate]
+        chromosomes[c2] = chromosomes[c2][:-number_to_rotate] + aux
     return chromosomes
 
 
-def get_min_max_from_ordered_dict(ordered_dict):
-    minim = 10000000
-    maxim = 0
-    for i in ordered_dict.keys():
-        if minim > i:
-            minim = i
-        if maxim < i:
-            maxim = i
-    return minim, maxim
+def mutation(chromosomes, mutation_number=5):
+    for i in range(mutation_number):
+        r = random.randint(0, 49)
+        g = random.randint(0, 9)
+        if chromosomes[r][g] == '0':
+            chromosomes[r] = chromosomes[r][:g] + "1" + chromosomes[r][g+1:]
+        elif chromosomes[r][g] == '1':
+            chromosomes[r] = chromosomes[r][:g] + "0" + chromosomes[r][g + 1:]
+    return chromosomes
 
 
 def main():
     c = init_chromosomes()
-    f, p = make_f_and_p(c)
-    print(np.sum(f))
-    p = OrderedDict(sorted(p.items()))
-    while np.sum(f) < 100000:
-        minim, maxim = get_min_max_from_ordered_dict(p)
-        new_c = []
-        for i in range(len(c)):
-            r = random.uniform(np.min(minim), np.max(maxim))
-            for key, value in p.items():
-                if r < key:
-                    new_c.append(c[c.index(value)])
-                    break
-
-        c = new_c
-
-        i = 0
-        r = random.randint(1, 10)
-        while i < len(c) - 1:
-            c[i], c[i + 1] = rotate_genes(c[i], c[i + 1], r)
-            i += 2
-
+    for i in range(10000):
+        f = make_f(c)
+        f = make_sorted_dict(f)
+        c = select_new_chromosomes(f)
+        c = rotate_genes(c)
         c = mutation(c)
-        f, p = make_f_and_p(c)
-        p = OrderedDict(sorted(p.items()))
-    print(np.sum(f), c)
 
 
 if __name__ == '__main__':
