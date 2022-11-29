@@ -15,6 +15,14 @@ def read_data():
         return year_of_exp, salary
 
 
+def function(i, j, w1, w2):
+    n = len(i)
+    s = 0
+    for k in range(len(i)):
+        s += (j[k] - (w1 * i[k] + w2))**2
+    return -(1 / (2*n)) * s
+
+
 def dw1(i, j, w1, w2):
     n = len(i)
     s = 0
@@ -31,7 +39,7 @@ def dw2(i, j, w1, w2):
     return -(1/n)*s
 
 
-def gradient_descent(x, y, w1, w2, iteration, learning_rate=0.01, threshold=0.00001):
+def gradient_descent(x, y, w1, w2, iteration, learning_rate=0.01, threshold=0.0001):
     data_w1 = list()
     data_w2 = list()
     data_w1.append(w1)
@@ -41,7 +49,7 @@ def gradient_descent(x, y, w1, w2, iteration, learning_rate=0.01, threshold=0.00
         new_data_w2 = data_w2[i] - learning_rate * dw2(x, y, w1, w2)
         data_w1.append(new_data_w1)
         data_w2.append(new_data_w2)
-        if abs(data_w1[-1] - data_w1[-2]) <= threshold and abs(data_w2[-1] - data_w2[-2]) <= threshold:
+        if function(x, y, data_w1[-1], data_w2[-1]) < threshold:
             break
     print(f'w1 = {data_w1[-1]}; w2 = {data_w2[-1]}')
 
