@@ -5,7 +5,7 @@ import numpy as np
 
 
 def activation_function(net):
-    return (2/(1 - math.e**(-net))) - 1
+    return (2/(1 + math.e**(-net))) - 1
 
 
 def read_patterns():
