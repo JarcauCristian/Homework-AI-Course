@@ -53,7 +53,8 @@ def delta_rule(patterns, results, weights, learning_rate=0.1, epochs=1000, max_e
                 net = np.dot(weights[k], patterns[j])
                 o.append(activation_function(net))
             for k in range(len(weights)):
-                weights[k] = weights[k] + learning_rate * (1 / 2) * (results[j][k] - o[k]) * (1 - o[k] ** 2) * patterns[j]
+                for v in range(len(weights[k])):
+                    weights[k][v] = weights[k][v] + learning_rate * (1/2) * (results[j][k] - o[k]) * (1 - o[k] ** 2) * patterns[j][v]
             for k in range(len(o)):
                 e += (results[j][k] - o[k]) ** 2
         if e < max_error:
