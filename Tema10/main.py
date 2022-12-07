@@ -44,21 +44,21 @@ def initialize_weights(number_of_perceptrons):
     return np.array(weights)
 
 
-def delta_rule(patterns, results, weights, learning_rate=1, max_error=0.01):
-    e = 10
-    while e >= max_error:
+def delta_rule(patterns, results, weights, learning_rate=0.1, epochs=1000, max_error=0.01):
+    for i in range(epochs):
         e = 0
-        for i in range(len(patterns)):
+        for j in range(len(patterns)):
             o = []
-            for j in range(len(weights)):
-                net = np.dot(weights[j], patterns[i])
+            for k in range(len(weights)):
+                net = np.dot(weights[k], patterns[j])
                 o.append(activation_function(net))
-            for j in range(len(weights)):
-                weights[j] += learning_rate * (1/2) * (results[i] - o) * (1 - np.array([e**2 for e in o])) * patterns[i]
-            i_e = 0
-            for j in range(len(results[i])):
-                i_e += (results[i][j] - o[j])**2
-            e = e + i_e
+            for k in range(len(weights)):
+                weights[k] = weights[k] + learning_rate * (1 / 2) * (results[j][k] - o[k]) * (1 - o[k] ** 2) * patterns[j]
+            for k in range(len(o)):
+                e += (results[j][k] - o[k]) ** 2
+        if e < max_error:
+            print(e)
+            break
     return weights
 
 
