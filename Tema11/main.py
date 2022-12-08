@@ -39,17 +39,18 @@ def dw2(i, j, w1, w2):
     return -(1/n)*s
 
 
-def gradient_descent(x, y, w1, w2, iteration, learning_rate=0.01, threshold=0.0001):
+def gradient_descent(x, y, w1, w2, iteration, learning_rate=0.01, threshold=0.00001):
     data_w1 = list()
     data_w2 = list()
     data_w1.append(w1)
     data_w2.append(w2)
     for i in range(iteration):
-        new_data_w1 = data_w1[i] - learning_rate * dw1(x, y, w1, w2)
-        new_data_w2 = data_w2[i] - learning_rate * dw2(x, y, w1, w2)
+        print(f'Iteration {i+1}')
+        new_data_w1 = data_w1[i] - learning_rate * dw1(x, y, data_w1[i], data_w2[i])
+        new_data_w2 = data_w2[i] - learning_rate * dw2(x, y, data_w1[i], data_w2[i])
         data_w1.append(new_data_w1)
         data_w2.append(new_data_w2)
-        if function(x, y, data_w1[-1], data_w2[-1]) < threshold:
+        if abs(data_w1[-1] - data_w1[-2]) <= threshold and abs(data_w2[-1] - data_w2[-2]) <= threshold:
             break
     print(f'w1 = {data_w1[-1]}; w2 = {data_w2[-1]}')
 
@@ -58,4 +59,4 @@ x_data, y_data = read_data()
 start_w1 = random.randint(0, 10)
 start_w2 = random.randint(0, 10)
 print(start_w1, start_w2)
-gradient_descent(x_data, y_data, start_w1, start_w2, 10)
+gradient_descent(x_data, y_data, start_w1, start_w2, 10000)
