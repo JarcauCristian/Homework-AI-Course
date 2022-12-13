@@ -26,10 +26,7 @@ def read_results():
         csv_reader = csv.reader(csv_in)
         results = []
         for row in csv_reader:
-            result = []
-            for i in row:
-                result.append(int(i))
-            results.append(result)
+            results.append(int(row[0]))
 
     return np.array(results)
 
@@ -67,14 +64,12 @@ def initialize_outer_weights(number_of_perceptrons):
     return np.array(weights)
 
 
-def backpropagation(patterns, results, inner_weights, outer_weights, learning_rate=0.1, epochs=1, max_error=0.01):
+def backpropagation(patterns, results, inner_weights, outer_weights, learning_rate=1.9, epochs=1000000, max_error=0.01):
     for i in range(epochs):
         print(f'Epoch {i+1}')
         e = 0
-        # Calculate Global error
         for j in range(len(patterns)):
             hidden_layer = []
-            # Calculate inner exits
             for k in range(len(inner_weights)):
                 net = np.dot(inner_weights[k], patterns[j])
                 hidden_layer.append(activation_function(net))
@@ -88,7 +83,7 @@ def backpropagation(patterns, results, inner_weights, outer_weights, learning_ra
             delta_yj = list()
 
             for k in range(len(outer_weights[0])):
-                delta_yj.append((0.5 * (1 - hidden_layer[k] ** 2) * delta_ok * outer_weights[0][k])[0])
+                delta_yj.append(0.5 * (1 - hidden_layer[k] ** 2) * delta_ok * outer_weights[0][k])
 
             for k in range(len(inner_weights)):
                 for s in range(len(inner_weights[k])):
@@ -98,23 +93,28 @@ def backpropagation(patterns, results, inner_weights, outer_weights, learning_ra
                 for s in range(len(outer_weights[k])):
                     outer_weights[k][s] = outer_weights[k][s] + learning_rate * delta_ok * hidden_layer[k]
 
-            e += (0.5 * (results[j] - outer_layer)**2)[0]
+            e += 0.5 * (results[j] - outer_layer)**2
 
         if e < max_error:
             print(e)
             break
         print(e)
 
-        return inner_weights, outer_weights
+    return inner_weights, outer_weights
 
 
-def exits(patterns, weights):
+def exits(patterns, inner_weights, outer_weights):
     for i in range(len(patterns)):
-        o = []
-        for j in weights:
-            net = np.dot(j, patterns[i])
-            o.append(activation_function(net))
-        print(f'Exits for pattern {i+1}: {o}')
+        hidden_layer = []
+        for k in range(len(inner_weights)):
+            net = np.dot(inner_weights[k], patterns[i])
+            hidden_layer.append(activation_function(net))
+
+        hidden_layer.append(-1)
+
+        net = np.dot(outer_weights, hidden_layer)
+        outer_layer = activation_function(net)
+        print(f'Exit for pattern {i + 1}: {outer_layer}')
 
 
 y = read_patterns()
@@ -123,4 +123,4 @@ v = initialize_weights(3)
 w = initialize_outer_weights(1)
 y = normalize_patterns(y)
 new_v, new_w = backpropagation(y, d, v, w)
-# exits(y, new_w)
+exits(y, new_v, new_w)
