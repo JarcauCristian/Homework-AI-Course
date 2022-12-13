@@ -64,7 +64,7 @@ def initialize_outer_weights(number_of_perceptrons):
     return np.array(weights)
 
 
-def backpropagation(patterns, results, inner_weights, outer_weights, learning_rate=1.9, epochs=1000000, max_error=0.01):
+def backpropagation(patterns, results, inner_weights, outer_weights, learning_rate=1, epochs=1000000, max_error=0.01):
     for i in range(epochs):
         print(f'Epoch {i+1}')
         e = 0
