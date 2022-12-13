@@ -31,24 +31,23 @@ def normalize_data(dt):
     return dt
 
 
-data = pd.read_csv('haberman.csv', dtype=float)
+data = pd.read_csv('iris.csv', dtype=float)
 
 train, test = train_test_split(data, train_size=0.8, test_size=0.2)
-train_x = train.drop(["4"], axis=1)
-test_x = test.drop(["4"], axis=1)
-train_y = train["4"]
-test_y = test["4"]
+train_x = train.drop(["5"], axis=1)
+test_x = test.drop(["5"], axis=1)
+train_y = train["5"]
+test_y = test["5"]
 train_x = normalize_data(train_x)
 test_x = normalize_data(test_x)
 
 my_init = k.initializers.glorot_uniform(seed=1)
 model = k.models.Sequential()
-model.add(k.layers.Dense(units=8, input_dim=3, activation='tanh', kernel_initializer=my_init))
-model.add(k.layers.Dense(units=8, activation='tanh', kernel_initializer=my_init))
+model.add(k.layers.Dense(units=6, input_dim=4, activation='tanh', kernel_initializer=my_init))
+model.add(k.layers.Dense(units=6, activation='tanh', kernel_initializer=my_init))
 model.add(k.layers.Dense(units=1, activation='sigmoid', kernel_initializer=my_init))
 simple_sgd = k.optimizers.SGD(learning_rate=0.01)
-adam = k.optimizers.Adam(learning_rate=0.01)
-model.compile(loss='binary_crossentropy', optimizer=adam, metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer=simple_sgd, metrics=['accuracy'])
 
 max_epochs = 1000
 my_logger = MyLogger(n=50)
