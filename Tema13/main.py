@@ -2,7 +2,6 @@ import numpy as np
 import keras as k
 import os
 import pandas as pd
-from sklearn.model_selection import train_test_split
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
@@ -31,22 +30,25 @@ def normalize_data(dt):
     return dt
 
 
-data = pd.read_csv('iris.csv', dtype=float)
+data = pd.read_csv('haberman.csv', dtype=float)
 
-train, test = train_test_split(data, train_size=0.8, test_size=0.2)
-train_x = train.drop(["5"], axis=1)
-test_x = test.drop(["5"], axis=1)
-train_y = train["5"]
-test_y = test["5"]
+train = data[0:244]
+test = data[244:]
+train_x = train.drop(["4"], axis=1)
+test_x = test.drop(["4"], axis=1)
+train_y = train["4"]
+test_y = test["4"]
 train_x = normalize_data(train_x)
 test_x = normalize_data(test_x)
 
 my_init = k.initializers.glorot_uniform(seed=1)
 model = k.models.Sequential()
-model.add(k.layers.Dense(units=6, input_dim=4, activation='tanh', kernel_initializer=my_init))
-model.add(k.layers.Dense(units=6, activation='tanh', kernel_initializer=my_init))
+model.add(k.layers.Dense(units=8, input_dim=3, activation='relu', kernel_initializer=my_init))
+model.add(k.layers.Dense(units=8, activation='tanh', kernel_initializer=my_init))
 model.add(k.layers.Dense(units=1, activation='sigmoid', kernel_initializer=my_init))
-simple_sgd = k.optimizers.SGD(learning_rate=0.01)
+
+simple_sgd = k.optimizers.SGD(learning_rate=0.001)
+
 model.compile(loss='binary_crossentropy', optimizer=simple_sgd, metrics=['accuracy'])
 
 max_epochs = 1000
@@ -57,3 +59,10 @@ np.set_printoptions(precision=4, suppress=True)
 eval_results = model.evaluate(test_x, test_y, verbose=0)
 print("\nLoss, accuracy on test data: ")
 print("%0.4f %0.2f%%" % (eval_results[0], eval_results[1]*100))
+
+inpts = np.array([[1.0, 1.0, 1.0]], dtype=np.float32)
+pred = model.predict(inpts)
+print("\nPredicting authenticity for: ")
+print(inpts)
+print("Probability that class = 2:")
+print(pred)
