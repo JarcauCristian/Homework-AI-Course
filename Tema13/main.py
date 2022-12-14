@@ -51,7 +51,7 @@ simple_sgd = k.optimizers.SGD(learning_rate=0.001)
 
 model.compile(loss='binary_crossentropy', optimizer=simple_sgd, metrics=['accuracy'])
 
-max_epochs = 500
+max_epochs = 150
 my_logger = MyLogger(n=50)
 h = model.fit(train_x, train_y, batch_size=32, epochs=max_epochs, verbose=0, callbacks=[my_logger])
 
