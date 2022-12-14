@@ -39,7 +39,7 @@ def normalize_patterns(patterns):
     max_col.append(np.max(patterns[:, 0]))
     max_col.append(np.max(patterns[:, 1]))
     for i in range(2):
-        patterns[:, i] = 2 * (patterns[:, i] - min_col[i]) / (max_col[i] - min_col[i]) - 1
+        patterns[:, i] = (patterns[:, i] - min_col[i]) / (max_col[i] - min_col[i])
 
     return patterns
 
@@ -49,7 +49,7 @@ def initialize_weights(number_of_perceptrons):
     for i in range(number_of_perceptrons):
         weight = []
         for j in range(3):
-            weight.append(random.uniform(-1, 1))
+            weight.append(random.uniform(0, 1))
         weights.append(weight)
     return np.array(weights)
 
@@ -59,14 +59,16 @@ def initialize_outer_weights(number_of_perceptrons):
     for i in range(number_of_perceptrons):
         weight = []
         for j in range(4):
-            weight.append(random.uniform(-1, 1))
+            weight.append(random.uniform(0, 1))
         weights.append(weight)
     return np.array(weights)
 
 
-def backpropagation(patterns, results, inner_weights, outer_weights, learning_rate=1, epochs=1000000, max_error=0.01):
+def backpropagation(patterns, results, inner_weights, outer_weights, learning_rate=0.1, epochs=100000, max_error=0.01):
     for i in range(epochs):
         print(f'Epoch {i+1}')
+        if i % 1000 == 0:
+            learning_rate = learning_rate - 0.01
         e = 0
         for j in range(len(patterns)):
             hidden_layer = []
@@ -85,13 +87,13 @@ def backpropagation(patterns, results, inner_weights, outer_weights, learning_ra
             for k in range(len(outer_weights[0])):
                 delta_yj.append(0.5 * (1 - hidden_layer[k] ** 2) * delta_ok * outer_weights[0][k])
 
-            for k in range(len(inner_weights)):
-                for s in range(len(inner_weights[k])):
-                    inner_weights[k][s] = inner_weights[k][s] + learning_rate * delta_yj[k] * patterns[j][s]
-
             for k in range(len(outer_weights)):
                 for s in range(len(outer_weights[k])):
                     outer_weights[k][s] = outer_weights[k][s] + learning_rate * delta_ok * hidden_layer[k]
+
+            for k in range(len(inner_weights)):
+                for s in range(len(inner_weights[k])):
+                    inner_weights[k][s] = inner_weights[k][s] + learning_rate * delta_yj[k] * patterns[j][s]
 
             e += 0.5 * (results[j] - outer_layer)**2
 
