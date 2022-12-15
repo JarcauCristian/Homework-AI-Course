@@ -49,7 +49,7 @@ def initialize_weights(number_of_perceptrons):
     for i in range(number_of_perceptrons):
         weight = []
         for j in range(3):
-            weight.append(random.uniform(0, 1))
+            weight.append(random.uniform(-1, 1))
         weights.append(weight)
     return np.array(weights)
 
@@ -59,7 +59,7 @@ def initialize_outer_weights(number_of_perceptrons):
     for i in range(number_of_perceptrons):
         weight = []
         for j in range(4):
-            weight.append(random.uniform(0, 1))
+            weight.append(random.uniform(-1, 1))
         weights.append(weight)
     return np.array(weights)
 

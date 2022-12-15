@@ -39,7 +39,7 @@ def dw2(i, j, w1, w2):
     return -(1/n)*s
 
 
-def gradient_descent(x, y, w1, w2, iteration, learning_rate=0.01, threshold=0.00001):
+def gradient_descent(x, y, w1, w2, iteration, learning_rate=0.01, threshold=0.000001):
     data_w1 = list()
     data_w2 = list()
     data_w1.append(w1)
