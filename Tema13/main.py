@@ -3,7 +3,7 @@ import keras as k
 import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TF_CPP_MINa_LOG_LEVEL'] = '2'
 
 
 class MyLogger(k.callbacks.Callback):
