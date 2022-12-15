@@ -33,7 +33,7 @@ def normalize_data(dt):
 
 data = pd.read_csv('iris.csv', dtype=float)
 
-train, test = train_test_split(data, train_size=0.8, test_size=0.2)
+train, test = train_test_split(data, train_size=0.6, test_size=0.4)
 train_x = train.drop(["5"], axis=1)
 test_x = test.drop(["5"], axis=1)
 train_y = train["5"]
@@ -51,7 +51,7 @@ simple_sgd = k.optimizers.SGD(learning_rate=0.001)
 
 model.compile(loss='binary_crossentropy', optimizer=simple_sgd, metrics=['accuracy'])
 
-max_epochs = 150
+max_epochs = 500
 my_logger = MyLogger(n=50)
 h = model.fit(train_x, train_y, batch_size=32, epochs=max_epochs, verbose=0, callbacks=[my_logger])
 
